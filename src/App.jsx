@@ -23,7 +23,6 @@ const reducer = (state, action) => {
       };
 
     case "SET_OPERATOR":
-  // agar current bo‘sh bo‘lsa → operatorni almashtir
   if (!state.current && state.previous) {
     return {
       ...state,
@@ -33,7 +32,6 @@ const reducer = (state, action) => {
 
   if (!state.current) return state;
 
-  // ketma-ket amal (oldingi yechim)
   if (state.previous && state.operator) {
     const a = Number(state.previous);
     const b = Number(state.current);
