@@ -36,3 +36,10 @@ button:active::after {
   width: 150px;
   border-radius: 50px;
 }
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scroll {
+  -ms-overflow-style: none;  /* IE va Edge */
+}

@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useRef, useReducer } from "react";
 
 const initialState = {
   current: "",
@@ -23,49 +23,49 @@ const reducer = (state, action) => {
       };
 
     case "SET_OPERATOR":
-  if (!state.current && state.previous) {
-    return {
-      ...state,
-      operator: action.payload,
-    };
-  }
+      if (!state.current && state.previous) {
+        return {
+          ...state,
+          operator: action.payload,
+        };
+      }
 
-  if (!state.current) return state;
+      if (!state.current) return state;
 
-  if (state.previous && state.operator) {
-    const a = Number(state.previous);
-    const b = Number(state.current);
-    let result;
+      if (state.previous && state.operator) {
+        const a = Number(state.previous);
+        const b = Number(state.current);
+        let result;
 
-    switch (state.operator) {
-      case "+":
-        result = a + b;
-        break;
-      case "-":
-        result = a - b;
-        break;
-      case "*":
-        result = a * b;
-        break;
-      case "/":
-        result = b !== 0 ? a / b : "Error";
-        break;
-      default:
-        return state;
-    }
+        switch (state.operator) {
+          case "+":
+            result = a + b;
+            break;
+          case "-":
+            result = a - b;
+            break;
+          case "*":
+            result = a * b;
+            break;
+          case "/":
+            result = b !== 0 ? a / b : "Error";
+            break;
+          default:
+            return state;
+        }
 
-    return {
-      previous: result.toString(),
-      current: "",
-      operator: action.payload,
-    };
-  }
+        return {
+          previous: result.toString(),
+          current: "",
+          operator: action.payload,
+        };
+      }
 
-  return {
-    previous: state.current,
-    current: "",
-    operator: action.payload,
-  };
+      return {
+        previous: state.current,
+        current: "",
+        operator: action.payload,
+      };
     case "PERCENT":
       return {
         ...state,
@@ -131,12 +131,33 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const displayRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  const startDelete = () => {
+    dispatch({ type: "DELETE" });
+
+    intervalRef.current = setInterval(() => {
+      dispatch({ type: "DELETE" });
+    }, 100);
+  };
+
+  const stopDelete = () => {
+    clearInterval(intervalRef.current);
+  };
+
+  useEffect(() => {
+    if (displayRef.current) {
+      displayRef.current.scrollLeft = displayRef.current.scrollWidth;
+    }
+  }, [state]);
+
   return (
-    <div className="w-full flex flex-col gap-2.5 justify-end items-center h-screen pb-10">
+    <div className="w-full flex flex-col gap-2.5 justify-end items-center h-screen pb-10 overflow-x-auto whitespace-nowrap hide-scroll">
       {" "}
       <div
-        id="output"
-        className="w-[320px] text-white text-[64px] text-right pr-4 overflow-x-auto"
+        ref={displayRef}
+        className="w-[320px] text-white text-[64px] text-right pr-4 overflow-x-auto whitespace-nowrap hide-scroll"
       >
         {state.previous && state.operator
           ? state.previous + state.operator + state.current
@@ -144,6 +165,11 @@ const App = () => {
       </div>
       <div className="flex gap-2.5">
         <button
+          onMouseDown={startDelete}
+          onMouseUp={stopDelete}
+          onMouseLeave={stopDelete}
+          onTouchStart={startDelete}
+          onTouchEnd={stopDelete}
           onClick={() =>
             dispatch({
               type: state.isCalculated ? "CLEAR" : "DELETE",
