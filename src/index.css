@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+body {
+  background-color: black;
+}
+button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #2b2b2d;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+button:active {
+  filter: brightness(0.8);
+  background-color: #737373;
+}
+button::after {
+  content: "";
+  transition: 0.4s;
+}
+
+button:active::after {
+  opacity: 0.3;
+}
+
+#fristBtn {
+  background-color: #5c5c5e;
+}
+#lastBtn {
+  background-color: #ff9f0a;
+}
+#zero {
+  width: 150px;
+  border-radius: 50px;
+}
