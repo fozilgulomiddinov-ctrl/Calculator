@@ -139,7 +139,7 @@ const App = () => {
 
     intervalRef.current = setInterval(() => {
       dispatch({ type: "DELETE" });
-    }, 400);
+    }, 1000);
   };
 
   const stopDelete = () => {
