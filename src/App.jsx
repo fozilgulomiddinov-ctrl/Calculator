@@ -139,7 +139,7 @@ const App = () => {
 
     intervalRef.current = setInterval(() => {
       dispatch({ type: "DELETE" });
-    }, 500);
+    }, 300);
   };
 
   const stopDelete = () => {
@@ -157,7 +157,19 @@ const App = () => {
       {" "}
       <div
         ref={displayRef}
-        className="w-[320px] text-white text-[64px] text-right pr-4 overflow-x-auto whitespace-nowrap hide-scroll"
+        className="w-[320px] text-white text-right pr-4 overflow-x-auto whitespace-nowrap hide-scroll transition-all duration-300"
+        style={{
+          fontSize:
+            (state.previous && state.operator
+              ? (state.previous + state.operator + state.current).length
+              : state.current.length) > 12
+              ? "32px"
+              : (state.previous && state.operator
+                    ? (state.previous + state.operator + state.current).length
+                    : state.current.length) > 9
+                ? "48px"
+                : "64px",
+        }}
       >
         {state.previous && state.operator
           ? state.previous + state.operator + state.current
@@ -165,17 +177,11 @@ const App = () => {
       </div>
       <div className="flex gap-2.5">
         <button
-        className="bg-[#5c5c5e]"
           onMouseDown={startDelete}
           onMouseUp={stopDelete}
           onMouseLeave={stopDelete}
           onTouchStart={startDelete}
           onTouchEnd={stopDelete}
-          onClick={() =>
-            dispatch({
-              type: state.isCalculated ? "CLEAR" : "DELETE",
-            })
-          }
         >
           {state.isCalculated ? "AC" : "⌫"}
         </button>
