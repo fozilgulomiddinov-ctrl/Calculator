@@ -139,7 +139,7 @@ const App = () => {
 
     intervalRef.current = setInterval(() => {
       dispatch({ type: "DELETE" });
-    }, 100);
+    }, 500);
   };
 
   const stopDelete = () => {
@@ -165,6 +165,7 @@ const App = () => {
       </div>
       <div className="flex gap-2.5">
         <button
+        className="bg-[#5c5c5e]"
           onMouseDown={startDelete}
           onMouseUp={stopDelete}
           onMouseLeave={stopDelete}
